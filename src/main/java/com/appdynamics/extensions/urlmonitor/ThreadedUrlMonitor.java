@@ -197,7 +197,6 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
 
                         final SiteResult result = new SiteResult();
                         result.setStatus(ResultStatus.SUCCESS);
-                        result.setSuccessPercentage(100);
 
                         final ByteArrayOutputStream body = new ByteArrayOutputStream();
 
@@ -224,7 +223,6 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                 //int availability = 0;
                                 HashMap<String, Integer> matches = null;
                                 SiteResult.ResultStatus status = SiteResult.ResultStatus.UNKNOWN;
-                                result.setSuccessPercentage(0);
                                 for (SiteResult result : results) {
                                     status = result.getStatus();
                                     statusCode = result.getResponseCode();
@@ -301,6 +299,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                             site.getUrl(),
                                             status.getStatusCode(),
                                             status.getStatusText()));
+                                            result.setSuccessPercentage(100);
                                     return STATE.CONTINUE;
                                 } else if (status.getStatusCode() == 401 && !site.isTreatAuthFailedAsError()) {
                                     log.info(String.format("[%s] %s %s -> %d %s [but OK]",
@@ -309,6 +308,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                             site.getUrl(),
                                             status.getStatusCode(),
                                             status.getStatusText()));
+                                            result.setSuccessPercentage(0);
                                     return STATE.CONTINUE;
                                 }
 
@@ -319,8 +319,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                         status.getStatusCode(),
                                         status.getStatusText()));
                                 result.setStatus(ResultStatus.ERROR);
-                                result.setSuccessPercentage(0);
-                                
+                                result.setSuccessPercentage(0);                               
 
                                 return STATE.ABORT;
                             }
