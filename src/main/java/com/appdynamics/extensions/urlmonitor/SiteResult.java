@@ -25,6 +25,7 @@ public class SiteResult {
     private ResultStatus status;
     private int responseCode;
     private long responseBytes;
+    private long successPercentage;
     private HashMap<String, Integer> matches = new HashMap<String, Integer>();
 
     public SiteResult() {
@@ -64,6 +65,14 @@ public class SiteResult {
 
     public void setResponseBytes(long responseBytes) {
         this.responseBytes = responseBytes;
+    }
+    
+     public long getSuccessPercentage() {
+        return successPercentage;
+    }
+
+    public void setSuccessPercentage(long successPercentage) {
+        this.successPercentage = successPercentage;
     }
 
     public HashMap<String, Integer> getMatches() { return matches; }
