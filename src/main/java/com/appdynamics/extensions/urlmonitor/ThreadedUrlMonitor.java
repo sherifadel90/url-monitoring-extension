@@ -197,6 +197,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
 
                         final SiteResult result = new SiteResult();
                         result.setStatus(ResultStatus.SUCCESS);
+                        result.setSuccessPercentage(100);
 
                         final ByteArrayOutputStream body = new ByteArrayOutputStream();
 
@@ -219,9 +220,11 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                 long totalElapsedTime = 0;
                                 int statusCode = 0;
                                 long responseSize = 0;
+                                long successPercentage = 0;
                                 //int availability = 0;
                                 HashMap<String, Integer> matches = null;
                                 SiteResult.ResultStatus status = SiteResult.ResultStatus.UNKNOWN;
+                                result.setSuccessPercentage(0);
                                 for (SiteResult result : results) {
                                     status = result.getStatus();
                                     statusCode = result.getResponseCode();
@@ -232,6 +235,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                     totalFirstByteTime += result.getFirstByteTime();
                                     totalDownloadTime += result.getDownloadTime();
                                     totalElapsedTime += result.getTotalTime();
+                                    successPercentage = result.getSuccessPercentage();
                                     matches = result.getMatches();
                                 }
 
@@ -264,6 +268,7 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                 printMetricWithValue(myMetricPath + "|Response Code", Integer.toString(statusCode));
                                 printMetricWithValue(myMetricPath + "|Status", Long.toString(status.ordinal()));
                                 printMetricWithValue(myMetricPath + "|Response Bytes", Long.toString(responseSize));
+                                printMetricWithValue(myMetricPath + "|Success Percentage", Long.toString(successPercentage));
                                 //printMetricWithValue(myMetricPath + "|Availability", Integer.toString(availability));
 
 
@@ -314,6 +319,8 @@ public class ThreadedUrlMonitor extends AManagedMonitor {
                                         status.getStatusCode(),
                                         status.getStatusText()));
                                 result.setStatus(ResultStatus.ERROR);
+                                result.setSuccessPercentage(0);
+                                
 
                                 return STATE.ABORT;
                             }
